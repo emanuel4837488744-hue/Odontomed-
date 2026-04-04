@@ -37,6 +37,94 @@
     </script>
 
     <style>
+        /* ==========================================
+           CORREÇÃO DO FUNDO CINZA (CRITICAL CSS)
+           Força o azul antes do Tailwind carregar
+           ========================================== */
+        body {
+            background: #0077B6 !important; 
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ==========================================
+           BOTÃO WHATSAPP - ISOLADO E SEGURO
+           ========================================== */
+        .whatsapp-float {
+            position: fixed !important;
+            bottom: 24px !important;
+            right: 24px !important;
+            width: 60px !important;
+            height: 60px !important;
+            background-color: #25D366 !important;
+            color: #FFF !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            z-index: 99999 !important;
+            text-decoration: none !important;
+            animation: waFloat 3s ease-in-out infinite !important;
+            cursor: pointer !important;
+            border: none !important;
+            outline: none !important;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128C7E !important;
+            animation: none !important;
+            transform: scale(1.1) !important;
+        }
+
+        .whatsapp-float i {
+            font-size: 32px !important;
+            position: relative !important;
+            z-index: 2 !important;
+            line-height: 1 !important;
+        }
+
+        .wa-pulse {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 50% !important;
+            background-color: #25D366 !important;
+            animation: waPulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite !important;
+            pointer-events: none !important;
+        }
+
+        @keyframes waFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes waPulse {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* Ajuste Mobile para o botão */
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                bottom: 16px !important;
+                right: 16px !important;
+                width: 54px !important;
+                height: 54px !important;
+            }
+            .whatsapp-float i {
+                font-size: 28px !important;
+            }
+        }
+
+        /* Estilos Globais */
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
@@ -52,28 +140,8 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .float-whatsapp {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .pulse-ring {
-            position: absolute;
-            border-radius: 50%;
-            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-        
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
+        .service-card {
+            transition: all 0.3s ease;
         }
         
         .service-card:hover {
@@ -86,33 +154,39 @@
         }
 
         .nav-scrolled {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98) !important;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Prevenir flash de conteúdo não estilizado */
-        .page-loaded {
-            opacity: 1;
-            transition: opacity 0.3s ease-in;
-        }
-
-        .page-loading {
-            opacity: 0;
-        }
-
-        /* Garantir contraste inicial */
-        #inicio {
+        /* Loading screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100000;
             background: linear-gradient(135deg, #0077B6 0%, #00B4D8 50%, #90E0EF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="page-loading">
+<body style="background-color: #0077B6;">
 
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 gradient-bg z-50 flex items-center justify-center">
+    <div id="loading-screen">
         <div class="text-center">
-            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse shadow-xl">
                 <i class="fas fa-tooth text-primary text-4xl"></i>
             </div>
             <p class="text-white font-semibold text-lg">Carregando...</p>
@@ -120,43 +194,43 @@
     </div>
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 py-4">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 bg-gradient-to-r from-primary to-secondary">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2" data-aos="fade-right">
-                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
                         <i class="fas fa-tooth text-primary text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white nav-text transition-colors">OdontoMed</h1>
-                        <p class="text-xs text-gray-200 nav-subtext transition-colors">Planaltina</p>
+                        <h1 class="text-2xl font-bold text-white">OdontoMed</h1>
+                        <p class="text-xs text-gray-100">Planaltina</p>
                     </div>
                 </div>
                 
-                <div class="hidden md:flex items-center space-x-8" data-aos="fade-left">
-                    <a href="#inicio" class="text-white nav-link hover:text-secondary transition font-medium">Início</a>
-                    <a href="#sobre" class="text-white nav-link hover:text-secondary transition font-medium">Sobre</a>
-                    <a href="#servicos" class="text-white nav-link hover:text-secondary transition font-medium">Serviços</a>
-                    <a href="#horarios" class="text-white nav-link hover:text-secondary transition font-medium">Horários</a>
-                    <a href="#contato" class="bg-white text-primary px-6 py-2 rounded-full font-semibold hover:bg-secondary hover:text-white transition shadow-lg">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#inicio" class="text-white hover:text-accent transition font-medium">Início</a>
+                    <a href="#sobre" class="text-white hover:text-accent transition font-medium">Sobre</a>
+                    <a href="#servicos" class="text-white hover:text-accent transition font-medium">Serviços</a>
+                    <a href="#horarios" class="text-white hover:text-accent transition font-medium">Horários</a>
+                    <a href="#contato" class="bg-white text-primary px-6 py-2 rounded-full font-semibold hover:bg-accent hover:text-white transition shadow-lg">
                         Agendar Consulta
                     </a>
                 </div>
 
-                <button id="mobile-menu-btn" class="md:hidden text-white nav-link text-2xl">
+                <button id="mobile-menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white absolute w-full shadow-xl">
+        <div id="mobile-menu" class="hidden md:hidden bg-white absolute w-full shadow-xl top-full left-0">
             <div class="flex flex-col p-6 space-y-4">
-                <a href="#inicio" class="text-gray-800 hover:text-primary font-medium">Início</a>
-                <a href="#sobre" class="text-gray-800 hover:text-primary font-medium">Sobre</a>
-                <a href="#servicos" class="text-gray-800 hover:text-primary font-medium">Serviços</a>
-                <a href="#horarios" class="text-gray-800 hover:text-primary font-medium">Horários</a>
-                <a href="#contato" class="text-primary font-semibold">Agendar Consulta</a>
+                <a href="#inicio" class="text-gray-800 hover:text-primary font-medium py-2">Início</a>
+                <a href="#sobre" class="text-gray-800 hover:text-primary font-medium py-2">Sobre</a>
+                <a href="#servicos" class="text-gray-800 hover:text-primary font-medium py-2">Serviços</a>
+                <a href="#horarios" class="text-gray-800 hover:text-primary font-medium py-2">Horários</a>
+                <a href="#contato" class="text-primary font-semibold py-2">Agendar Consulta</a>
             </div>
         </div>
     </nav>
@@ -165,13 +239,12 @@
     <section id="inicio" class="gradient-bg hero-pattern min-h-screen flex items-center relative overflow-hidden pt-20">
         <div class="absolute inset-0 bg-black opacity-10"></div>
         
-        <!-- Floating Elements -->
         <div class="absolute top-20 left-10 w-20 h-20 bg-white opacity-10 rounded-full animate-pulse"></div>
-        <div class="absolute bottom-20 right-10 w-32 h-32 bg-white opacity-10 rounded-full animate-pulse delay-1000"></div>
+        <div class="absolute bottom-20 right-10 w-32 h-32 bg-white opacity-10 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
         
         <div class="container mx-auto px-6 relative z-10">
             <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 text-white" data-aos="fade-right" data-aos-duration="1000">
+                <div class="md:w-1/2 text-white">
                     <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                         <span class="text-sm font-semibold">🏥 Saúde Integrada</span>
                     </div>
@@ -209,15 +282,14 @@
                     </div>
                 </div>
                 
-                <div class="md:w-1/2 mt-12 md:mt-0" data-aos="fade-left" data-aos-duration="1000">
+                <div class="md:w-1/2 mt-12 md:mt-0">
                     <div class="relative">
                         <div class="absolute inset-0 bg-white rounded-full blur-3xl opacity-20"></div>
                         <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                              alt="Clínica OdontoMed" 
                              class="relative rounded-3xl shadow-2xl w-full object-cover h-96 md:h-[600px]">
                         
-                        <!-- Floating Card -->
-                        <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl" data-aos="zoom-in" data-aos-delay="500">
+                        <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl">
                             <div class="flex items-center gap-4">
                                 <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-check-circle text-green-500 text-2xl"></i>
@@ -234,7 +306,7 @@
         </div>
 
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <a href="#sobre" class="text-white text-3xl">
+            <a href="#sobre" class="text-white text-3xl hover:text-accent transition">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </div>
@@ -244,7 +316,7 @@
     <section id="sobre" class="py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/2" data-aos="fade-right">
+                <div class="md:w-1/2">
                     <div class="grid grid-cols-2 gap-4">
                         <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
                              alt="Consultório" class="rounded-2xl shadow-lg w-full h-48 object-cover">
@@ -253,7 +325,7 @@
                     </div>
                 </div>
                 
-                <div class="md:w-1/2" data-aos="fade-left">
+                <div class="md:w-1/2">
                     <div class="inline-block bg-blue-100 text-primary px-4 py-2 rounded-full mb-4">
                         <span class="text-sm font-semibold">Sobre Nós</span>
                     </div>
@@ -315,7 +387,7 @@
     <!-- Serviços Section -->
     <section id="servicos" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16" data-aos="fade-up">
+            <div class="text-center mb-16">
                 <div class="inline-block bg-blue-100 text-primary px-4 py-2 rounded-full mb-4">
                     <span class="text-sm font-semibold">Nossos Serviços</span>
                 </div>
@@ -328,80 +400,63 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Serviço 1 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-tooth text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Odontologia Geral</h3>
                     <p class="text-gray-600">Cuidados completos para sua saúde bucal com procedimentos preventivos e restauradores.</p>
                 </div>
-
-                <!-- Serviço 2 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-teeth text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Ortodontia</h3>
                     <p class="text-gray-600">Aparelhos fixos, estéticos e alinhadores para corrigir seu sorriso com conforto.</p>
                 </div>
-
-                <!-- Serviço 3 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-procedures text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Implantes Dentários</h3>
                     <p class="text-gray-600">Reabilitação oral com implantes de alta qualidade e tecnologia moderna.</p>
                 </div>
-
-                <!-- Serviço 4 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-baby text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Odontopediatria</h3>
                     <p class="text-gray-600">Atendimento especializado e acolhedor para crianças e adolescentes.</p>
                 </div>
-
-                <!-- Serviço 5 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-magic text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Estética Facial</h3>
                     <p class="text-gray-600">Harmonização facial e procedimentos estéticos para realçar sua beleza natural.</p>
                 </div>
-
-                <!-- Serviço 6 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-spa text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Depilação a Laser</h3>
                     <p class="text-gray-600">Tecnologia Soprano Ice Platinum para depilação eficaz e indolor.</p>
                 </div>
-
-                <!-- Serviço 7 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="700">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-user-md text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Medicina Integrativa</h3>
                     <p class="text-gray-600">Consultas médicas e abordagem multidisciplinar para sua saúde completa.</p>
                 </div>
-
-                <!-- Serviço 8 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="800">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-teeth-open text-primary text-3xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Endodontia</h3>
                     <p class="text-gray-600">Tratamento de canal com técnica moderna e sem dor.</p>
                 </div>
-
-                <!-- Serviço 9 -->
-                <div class="service-card bg-white p-8 rounded-2xl shadow-lg transition-all duration-300" data-aos="fade-up" data-aos-delay="900">
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-star text-primary text-3xl"></i>
                     </div>
@@ -410,7 +465,7 @@
                 </div>
             </div>
 
-            <div class="text-center mt-12" data-aos="fade-up">
+            <div class="text-center mt-12">
                 <a href="https://wa.me/5561992364866" target="_blank" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-secondary transition shadow-lg">
                     <i class="fab fa-whatsapp"></i>
                     Agende uma Avaliação
@@ -425,16 +480,12 @@
         
         <div class="container mx-auto px-6 relative z-10">
             <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12" data-aos="fade-up">
-                    <h2 class="text-4xl font-bold text-white mb-4">
-                        Horários de Atendimento
-                    </h2>
-                    <p class="text-gray-100 text-lg">
-                        Flexibilidade para atender você da melhor forma
-                    </p>
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-white mb-4">Horários de Atendimento</h2>
+                    <p class="text-gray-100 text-lg">Flexibilidade para atender você da melhor forma</p>
                 </div>
 
-                <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12" data-aos="zoom-in">
+                <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
                     <div class="grid md:grid-cols-2 gap-8">
                         <div class="text-center p-6 bg-blue-50 rounded-2xl">
                             <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -472,17 +523,15 @@
     <!-- Localização Section -->
     <section id="contato" class="py-20 bg-white">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-12" data-aos="fade-up">
+            <div class="text-center mb-12">
                 <div class="inline-block bg-blue-100 text-primary px-4 py-2 rounded-full mb-4">
                     <span class="text-sm font-semibold">Localização</span>
                 </div>
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">
-                    Onde Estamos
-                </h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Onde Estamos</h2>
             </div>
 
             <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div data-aos="fade-right">
+                <div>
                     <div class="bg-gray-100 p-8 rounded-2xl">
                         <div class="flex items-start gap-4 mb-6">
                             <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
@@ -523,7 +572,7 @@
                     </div>
                 </div>
 
-                <div data-aos="fade-left">
+                <div>
                     <div class="bg-gray-200 rounded-2xl overflow-hidden shadow-2xl h-96">
                         <iframe 
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3840.1234567890123!2d-47.61234567890123!3d-15.456789012345678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDI3JzI0LjQiUyA0N8KwMzYnNDQuNCJX!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr" 
@@ -547,7 +596,7 @@
             <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
         </div>
 
-        <div class="container mx-auto px-6 relative z-10 text-center" data-aos="zoom-in">
+        <div class="container mx-auto px-6 relative z-10 text-center">
             <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
                 Pronto para Transformar seu Sorriso?
             </h2>
@@ -620,7 +669,6 @@
                         CNPJ: 35.692.145/0001-85
                     </p>
                     
-                    <!-- Creditos Emanuel Araújo -->
                     <div class="text-center md:text-right">
                         <p class="text-gray-400 text-sm mb-3">Desenvolvido com ❤️ por</p>
                         <a href="https://wa.me/5561992560713" target="_blank" 
@@ -638,90 +686,57 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Float Button - Clínica -->
-    <a href="https://wa.me/5561992364866" target="_blank" 
-       class="float-whatsapp bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition relative group">
-        <div class="pulse-ring bg-green-500 w-16 h-16"></div>
-        <i class="fab fa-whatsapp text-3xl relative z-10"></i>
-        <span class="absolute right-full mr-3 bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity font-semibold text-sm">
-            Fale conosco!
-        </span>
+    <!-- WHATSAPP FLOAT BUTTON - CORRIGIDO E ISOLADO -->
+    <a href="https://wa.me/5561992364866" target="_blank" class="whatsapp-float" aria-label="Fale conosco pelo WhatsApp">
+        <div class="wa-pulse"></div>
+        <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- AOS Script -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <script>
-        // Prevenir flash de conteúdo - remover loading screen
+        // Loading screen
         window.addEventListener('load', function() {
             setTimeout(function() {
-                const loadingScreen = document.getElementById('loading-screen');
-                const body = document.body;
-                
-                loadingScreen.style.opacity = '0';
-                loadingScreen.style.transition = 'opacity 0.5s ease';
-                
-                setTimeout(function() {
-                    loadingScreen.style.display = 'none';
-                    body.classList.remove('page-loading');
-                    body.classList.add('page-loaded');
-                }, 500);
-            }, 500);
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 800);
         });
 
-        // Initialize AOS Animation Library
+        // Initialize AOS
         AOS.init({
             duration: 800,
             once: true,
-            offset: 100
+            offset: 100,
+            easing: 'ease-out-cubic'
         });
 
         // Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const navText = document.querySelector('.nav-text');
-        const navSubtext = document.querySelector('.nav-subtext');
-
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 navbar.classList.add('nav-scrolled');
-                navbar.classList.remove('py-4');
+                navbar.classList.remove('py-4', 'bg-gradient-to-r', 'from-primary', 'to-secondary');
                 navbar.classList.add('py-2');
-                
-                navLinks.forEach(link => {
-                    link.classList.remove('text-white');
-                    link.classList.add('text-gray-800');
-                });
-                
-                navText.classList.remove('text-white');
-                navText.classList.add('text-gray-800');
-                
-                navSubtext.classList.remove('text-gray-200');
-                navSubtext.classList.add('text-gray-500');
             } else {
-                navbar.classList.remove('nav-scrolled');
-                navbar.classList.remove('py-2');
-                navbar.classList.add('py-4');
-                
-                navLinks.forEach(link => {
-                    link.classList.add('text-white');
-                    link.classList.remove('text-gray-800');
-                });
-                
-                navText.classList.add('text-white');
-                navText.classList.remove('text-gray-800');
-                
-                navSubtext.classList.add('text-gray-200');
-                navSubtext.classList.remove('text-gray-500');
+                navbar.classList.remove('nav-scrolled', 'py-2');
+                navbar.classList.add('py-4', 'bg-gradient-to-r', 'from-primary', 'to-secondary');
             }
         });
 
-        // Mobile Menu Toggle
+        // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             mobileMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
         });
 
         // Smooth Scroll
@@ -730,20 +745,11 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     mobileMenu.classList.add('hidden');
                 }
             });
         });
-
-        // Add current year to footer
-        const yearSpan = document.querySelector('.year');
-        if (yearSpan) {
-            yearSpan.textContent = new Date().getFullYear();
-        }
     </script>
 </body>
 </html>
